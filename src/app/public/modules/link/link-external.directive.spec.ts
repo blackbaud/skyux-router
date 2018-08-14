@@ -19,7 +19,7 @@ import {
 
 import {
   SkyAppConfig
-} from '@blackbaud/skyux-builder/runtime/config';
+} from '@skyux/builder-utils/config';
 
 import {
   SkyAppWindowRef

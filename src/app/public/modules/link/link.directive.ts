@@ -15,7 +15,8 @@ import {
 
 import {
   SkyAppConfig
-} from '@blackbaud/skyux-builder/runtime/config';
+} from '@skyux/builder-utils/config';
+
 import { SkyAppLinkQueryParams } from './link-query-params';
 
 @Directive({
