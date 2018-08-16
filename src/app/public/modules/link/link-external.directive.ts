@@ -20,7 +20,7 @@ import {
 
 import {
   SkyAppWindowRef
-} from '@blackbaud/skyux-builder/runtime/window-ref';
+} from '@skyux/core';
 
 import { SkyAppLinkQueryParams } from './link-query-params';
 

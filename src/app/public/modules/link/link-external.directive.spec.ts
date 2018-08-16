@@ -23,7 +23,7 @@ import {
 
 import {
   SkyAppWindowRef
-} from '@blackbaud/skyux-builder/runtime/window-ref';
+} from '@skyux/core';
 
 import {
   SkyAppLinkExternalDirective
