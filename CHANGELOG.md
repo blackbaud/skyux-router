@@ -1,6 +1,10 @@
-# 3.0.0 (2018-09-06)
+# 3.0.0 (2018-09-19)
 
 - Initial major release.
+
+# 3.0.0-alpha.4 (2018-09-19)
+
+- Changed name of link module to `SkyAppLinkModule`.
 
 # 3.0.0-alpha.3 (2018-08-21)
 
