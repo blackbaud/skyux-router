@@ -1,7 +1,14 @@
 {
+  "$schema": "node_modules/@skyux/config/skyuxconfig-schema.json",
   "name": "skyux-router",
   "mode": "easy",
   "compileMode": "aot",
+  "skyuxModules": [
+    "SkyErrorModule"
+  ],
+  "plugins": [
+    "@skyux-sdk/builder-plugin-skyux"
+  ],
   "testSettings": {
     "unit": {
       "browserSet": "paranoid"
