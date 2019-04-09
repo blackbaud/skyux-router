@@ -6,7 +6,6 @@
   "module": "index.ts",
   "scripts": {
     "build": "skyux build-public-library",
-    "skyux": "skyux",
     "start": "skyux serve --hmr",
     "test": "skyux test --coverage library --logFormat none",
     "test:visual": "skyux e2e --logFormat none"
@@ -31,7 +30,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@blackbaud/skyux": "2.30.0",
-    "@blackbaud/skyux-builder": "1.29.0"
+    "@blackbaud/skyux": "2.46.1",
+    "@blackbaud/skyux-builder": "1.33.1",
+    "@skyux-sdk/builder-plugin-skyux": "1.0.0-rc.6"
   }
 }
