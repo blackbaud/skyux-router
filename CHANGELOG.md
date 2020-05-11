@@ -7,7 +7,7 @@
 
 ### Breaking changes
 
-- Dropped support for `rxjs@5`. Consumers may install `rxjs-compat@^6` to support older versions of `rxjs`. [#10](https://github.com/blackbaud/skyux-router/pull/10)
+- Dropped support for `rxjs@5`. Consumers can install `rxjs-compat@^6` to support older versions of `rxjs`. [#10](https://github.com/blackbaud/skyux-router/pull/10)
 
 # 3.1.1 (2019-04-09)
 
