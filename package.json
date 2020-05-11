@@ -1,6 +1,6 @@
 {
   "name": "@skyux/router",
-  "version": "4.0.0-rc.0",
+  "version": "4.0.0",
   "description": "SKY UX Router",
   "scripts": {
     "build": "skyux build-public-library",
