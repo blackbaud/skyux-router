@@ -1,6 +1,7 @@
 import {
   Directive,
-  Input
+  Input,
+  SimpleChanges
 } from '@angular/core';
 
 import {
@@ -29,23 +30,9 @@ import { SkyAppLinkQueryParams } from './link-query-params';
 })
 export class SkyAppLinkExternalDirective extends RouterLinkWithHref {
 
-  private _queryParams: SkyAppLinkQueryParams;
-
   @Input()
   set skyAppLinkExternal(commands: any[] | string) {
     this.routerLink = commands;
-  }
-
-  @Input()
-  set queryParams(params: SkyAppLinkQueryParams) {
-    this._queryParams = Object.assign(params, this.skyAppConfig.runtime.params.getAll());
-  }
-
-  get queryParams(): SkyAppLinkQueryParams {
-    if (!this._queryParams) {
-      this._queryParams = Object.assign({}, this.skyAppConfig.runtime.params.getAll());
-    }
-    return this._queryParams;
   }
 
   constructor(
@@ -61,5 +48,19 @@ export class SkyAppLinkExternalDirective extends RouterLinkWithHref {
     } else {
       this.target = '_top';
     }
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    this.queryParams = this.mergeQueryParams(changes.queryParams?.currentValue);
+    super.ngOnChanges(changes);
+  }
+
+  private mergeQueryParams(queryParams: SkyAppLinkQueryParams): SkyAppLinkQueryParams {
+    return Object.assign(
+      {},
+      this.queryParams,
+      queryParams,
+      this.skyAppConfig.runtime.params.getAll(true)
+    );
   }
 }
