@@ -6,6 +6,12 @@
   "plugins": [
     "@skyux-sdk/builder-plugin-skyux"
   ],
+  "params": {
+    "envid": {
+      "required": true,
+      "value": "foobarbaz-id"
+    }
+  },
   "testSettings": {
     "unit": {
       "browserSet": "paranoid"
