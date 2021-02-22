@@ -2,13 +2,7 @@ import {
   NgModule
 } from '@angular/core';
 
-import {
-  SkyAppLinkModule
-} from './public/public_api';
-
 @NgModule({
-  exports: [
-    SkyAppLinkModule
-  ]
+  exports: []
 })
 export class AppExtrasModule { }
