@@ -84,13 +84,9 @@ describe('SkyAppLink Directive', () => {
     fixture.detectChanges(); // initial binding
   }
 
-  fit('should set href without any queryParams', () => {
+  it('should set href without any queryParams', () => {
     setup({}, false);
-    fixture.detectChanges();
-    fixture.detectChanges();
     const directive = debugElement.query(By.directive(SkyAppLinkDirective));
-    fixture.detectChanges();
-    fixture.detectChanges();
     expect(directive.attributes['skyAppLink']).toEqual('test');
     expect(directive.properties['href']).toEqual('/test');
   });
