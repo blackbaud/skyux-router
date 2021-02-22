@@ -73,6 +73,7 @@ export class SkyAppLinkDirective extends RouterLinkWithHref implements OnInit, O
 
   /**
    * Watch for attribute changes to the anchor element so we can extend the query params afterwards.
+   * A MutationObserver is needed because the extended class owns the `queryParams` property, as well as the `ngOnChanges` lifecycle hook. Overwriting the `queryParams` property with an accessor (get/set) causes a TypeScript compilation error, and overwriting the `ngOnChanges` method may cause unknown problems, so to extend the `queryParams`, we must do it after Angular's router link updates the query params attribute on the anchor tag.
    */
   private listenQueryParamsAttributeChange(): void {
     this.observer = new MutationObserver((mutationsList) => {
