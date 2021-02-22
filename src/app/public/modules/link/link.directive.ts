@@ -1,6 +1,7 @@
 import {
   Directive,
   Input,
+  OnChanges,
   SimpleChanges
 } from '@angular/core';
 
@@ -23,7 +24,7 @@ import { SkyAppLinkQueryParams } from './link-query-params';
 @Directive({
   selector: '[skyAppLink]'
 })
-export class SkyAppLinkDirective extends RouterLinkWithHref {
+export class SkyAppLinkDirective extends RouterLinkWithHref implements OnChanges {
 
   @Input()
   set skyAppLink(commands: any[] | string) {
