@@ -2,6 +2,7 @@ import {
   Directive,
   Input,
   OnChanges,
+  Optional,
   SimpleChanges
 } from '@angular/core';
 
@@ -16,7 +17,8 @@ import {
 } from '@angular/router';
 
 import {
-  SkyAppConfig
+  SkyAppConfig,
+  SkyAppRuntimeConfigParamsProvider
 } from '@skyux/config';
 
 import { SkyAppLinkQueryParams } from './link-query-params';
@@ -35,7 +37,8 @@ export class SkyAppLinkDirective extends RouterLinkWithHref implements OnChanges
     router: Router,
     route: ActivatedRoute,
     locationStrategy: LocationStrategy,
-    private skyAppConfig: SkyAppConfig
+    @Optional() private skyAppConfig?: SkyAppConfig,
+    @Optional() private paramsProvider?: SkyAppRuntimeConfigParamsProvider
   ) {
     super(router, route, locationStrategy);
   }
@@ -46,11 +49,15 @@ export class SkyAppLinkDirective extends RouterLinkWithHref implements OnChanges
   }
 
   private mergeQueryParams(queryParams: SkyAppLinkQueryParams): SkyAppLinkQueryParams {
+    const skyuxParams = (this.skyAppConfig)
+      ? this.skyAppConfig.runtime.params.getAll(true)
+      : this.paramsProvider.params.getAll(true);
+
     return Object.assign(
       {},
       this.queryParams,
       queryParams,
-      this.skyAppConfig.runtime.params.getAll(true)
+      skyuxParams
     );
   }
 

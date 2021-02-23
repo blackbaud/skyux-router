@@ -2,6 +2,7 @@ import {
   Directive,
   Input,
   OnChanges,
+  Optional,
   SimpleChanges
 } from '@angular/core';
 
@@ -17,7 +18,8 @@ import {
 } from '@angular/router';
 
 import {
-  SkyAppConfig
+  SkyAppConfig,
+  SkyAppRuntimeConfigParamsProvider
 } from '@skyux/config';
 
 import {
@@ -26,6 +28,9 @@ import {
 
 import { SkyAppLinkQueryParams } from './link-query-params';
 
+/**
+ * @deprecated
+ */
 @Directive({
   selector: '[skyAppLinkExternal]'
 })
@@ -40,8 +45,9 @@ export class SkyAppLinkExternalDirective extends RouterLinkWithHref implements O
     router: Router,
     route: ActivatedRoute,
     platformLocation: PlatformLocation,
-    private skyAppConfig: SkyAppConfig,
-    private window: SkyAppWindowRef
+    private window: SkyAppWindowRef,
+    @Optional() private skyAppConfig?: SkyAppConfig,
+    @Optional() private paramsProvider?: SkyAppRuntimeConfigParamsProvider
   ) {
     super(router, route, new PathLocationStrategy(platformLocation, skyAppConfig.skyux.host.url));
     if (this.window.nativeWindow.window.name && this.window.nativeWindow.window.name !== '') {
@@ -57,11 +63,15 @@ export class SkyAppLinkExternalDirective extends RouterLinkWithHref implements O
   }
 
   private mergeQueryParams(queryParams: SkyAppLinkQueryParams): SkyAppLinkQueryParams {
+    const skyuxParams = (this.skyAppConfig)
+      ? this.skyAppConfig.runtime.params.getAll(true)
+      : this.paramsProvider.params.getAll(true);
+
     return Object.assign(
       {},
       this.queryParams,
       queryParams,
-      this.skyAppConfig.runtime.params.getAll(true)
+      skyuxParams
     );
   }
 }
