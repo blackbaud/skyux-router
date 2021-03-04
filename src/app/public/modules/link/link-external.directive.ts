@@ -19,6 +19,7 @@ import {
 
 import {
   SkyAppConfig,
+  SkyAppConfigHost,
   SkyAppRuntimeConfigParamsProvider
 } from '@skyux/config';
 
@@ -28,9 +29,6 @@ import {
 
 import { SkyAppLinkQueryParams } from './link-query-params';
 
-/**
- * @deprecated
- */
 @Directive({
   selector: '[skyAppLinkExternal]'
 })
@@ -47,9 +45,20 @@ export class SkyAppLinkExternalDirective extends RouterLinkWithHref implements O
     platformLocation: PlatformLocation,
     private window: SkyAppWindowRef,
     @Optional() private skyAppConfig?: SkyAppConfig,
-    @Optional() private paramsProvider?: SkyAppRuntimeConfigParamsProvider
+    @Optional() private paramsProvider?: SkyAppRuntimeConfigParamsProvider,
+    @Optional() hostConfig?: SkyAppConfigHost
   ) {
-    super(router, route, new PathLocationStrategy(platformLocation, skyAppConfig.skyux.host.url));
+    super(
+      router,
+      route,
+      new PathLocationStrategy(
+        platformLocation,
+        (skyAppConfig)
+          ? skyAppConfig.skyux.host.url
+          : hostConfig.host.url
+      )
+    );
+
     if (this.window.nativeWindow.window.name && this.window.nativeWindow.window.name !== '') {
       this.target = this.window.nativeWindow.window.name;
     } else {

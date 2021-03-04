@@ -27,6 +27,7 @@
     "styles": []
   },
   "host": {
+    "url": "https://app.blackbaud.com/",
     "frameOptions": {
       "none": true
     }
