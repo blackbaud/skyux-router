@@ -1,7 +1,6 @@
 import {
   Component,
   DebugElement
-  // NO_ERRORS_SCHEMA
 } from '@angular/core';
 
 import {
@@ -49,9 +48,6 @@ describe('SkyAppLink Directive', () => {
       SkyAppLinkTestComponent;
 
     TestBed.configureTestingModule({
-      // schemas: [
-      //   NO_ERRORS_SCHEMA
-      // ],
       declarations: [
         SkyAppLinkDirective,
         SkyAppLinkTestComponent,
