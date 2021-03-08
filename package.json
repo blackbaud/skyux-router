@@ -23,7 +23,7 @@
     "@angular/common": "^9.1.6",
     "@angular/core": "^9.1.6",
     "@angular/router": "^9.1.6",
-    "@skyux/config": "^4.0.0",
+    "@skyux/config": "^4.3.0",
     "@skyux/core": "^4.0.0"
   },
   "dependencies": {},
@@ -43,7 +43,7 @@
     "@skyux-sdk/e2e": "4.0.1",
     "@skyux-sdk/testing": "4.2.3",
     "@skyux/assets": "4.0.1",
-    "@skyux/config": "4.2.0",
+    "@skyux/config": "4.3.0",
     "@skyux/core": "4.3.3",
     "@skyux/http": "4.1.0",
     "@skyux/i18n": "4.0.3",
