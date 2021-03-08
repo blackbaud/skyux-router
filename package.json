@@ -44,7 +44,7 @@
     "@skyux-sdk/testing": "4.2.3",
     "@skyux/assets": "4.0.1",
     "@skyux/config": "4.3.0",
-    "@skyux/core": "4.3.3",
+    "@skyux/core": "4.4.0",
     "@skyux/http": "4.1.0",
     "@skyux/i18n": "4.0.3",
     "@skyux/indicators": "4.7.1",
