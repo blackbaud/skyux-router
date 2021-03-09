@@ -53,9 +53,9 @@ export class SkyAppLinkExternalDirective extends RouterLinkWithHref implements O
       route,
       new PathLocationStrategy(
         platformLocation,
-        (skyAppConfig)
-          ? skyAppConfig.skyux.host.url
-          : hostConfig.host.url
+        (hostConfig)
+          ? hostConfig.host.url
+          : skyAppConfig.skyux.host.url
       )
     );
 
