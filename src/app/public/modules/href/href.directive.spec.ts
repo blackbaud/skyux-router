@@ -211,6 +211,7 @@ describe('SkyHref Directive', () => {
     flush();
     const element = fixture.nativeElement.querySelector('.dynamicLink a');
     expect(element.style.display).not.toBe('none');
+    expect(element.getAttribute('href')).toBe('');
   }));
 
   it('should handle link without protocol', fakeAsync(() => {

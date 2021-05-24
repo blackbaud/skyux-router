@@ -1,5 +1,16 @@
 import { HttpParams } from '@angular/common/http';
-import { Directive, HostBinding, Input, OnDestroy, OnInit, Optional } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Renderer2
+} from '@angular/core';
+import { Router, UrlTree } from '@angular/router';
 import { SkyAppConfig, SkyAppRuntimeConfigParamsProvider } from '@skyux/config';
 
 import { Subscription } from 'rxjs';
@@ -7,6 +18,7 @@ import { Subscription } from 'rxjs';
 import { SkyHrefQueryParams } from './href-query-params';
 
 import { SkyHrefResolverAggregateService } from './href-resolver-aggregate.service';
+import { AppRoute } from './types/app-route';
 
 @Directive({
   selector: '[skyHref]'
@@ -16,19 +28,28 @@ export class SkyHrefDirective implements OnDestroy, OnInit {
   @HostBinding('style.display')
   public styleDisplay = 'none';
 
+  @Input()
+  public skipLocationChange = false;
+
+  @Input()
+  public replaceUrl = false;
+
+  @Input()
+  public state?: {[k: string]: any};
+
   @HostBinding('href')
   public get href(): string {
     return this._href || '';
   }
 
   public set href(value: string) {
-    this._href = value;
+    this._href = value.toLowerCase();
   }
 
   @Input()
   public set queryParams(value: SkyHrefQueryParams) {
     this._queryParams = value;
-    this.updateTargetUrlAndHref();
+    this.updateTargetUrlAndView();
   }
 
   @Input()
@@ -40,12 +61,15 @@ export class SkyHrefDirective implements OnDestroy, OnInit {
   @Input()
   public set skyHrefElse(value: 'hide' | 'unlink') {
     this._skyHrefElse = value;
-    this.updateView();
+    this.updateTargetUrlAndView();
   }
+
+  @HostBinding('target')
+  public target: string | undefined;
 
   private _resolverSubscription: Subscription;
 
-  private _routeUrl = '';
+  private _route: AppRoute | false = false;
 
   private _userHasAccess = false;
 
@@ -58,6 +82,9 @@ export class SkyHrefDirective implements OnDestroy, OnInit {
   private _skyHrefElse: 'hide' | 'unlink' = 'hide';
 
   constructor(
+    private router: Router,
+    private renderer: Renderer2,
+    private element: ElementRef,
     @Optional() private skyAppConfig?: SkyAppConfig,
     @Optional() private paramsProvider?: SkyAppRuntimeConfigParamsProvider,
     @Optional() private hrefResolver?: SkyHrefResolverAggregateService
@@ -76,10 +103,35 @@ export class SkyHrefDirective implements OnDestroy, OnInit {
     }
   }
 
-  private getSkyuxParams(): SkyHrefQueryParams {
-    return typeof this.skyAppConfig.runtime?.params?.getAll === 'function'
-      ? this.skyAppConfig.runtime?.params?.getAll(true)
-      : this.paramsProvider.params?.getAll(true);
+  /* istanbul ignore next */
+  @HostListener(
+    'click',
+    ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'])
+  public onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean):
+    boolean {
+    if (!this._userHasAccess) {
+      return false;
+    }
+
+    if (button !== 0 || ctrlKey || shiftKey || altKey || metaKey) {
+      return true;
+    }
+
+    if (typeof this.target === 'string' && this.target !== '_self') {
+      return true;
+    }
+
+    const urlTree = this.getUrlTree();
+    if (urlTree) {
+      const extras = {
+        skipLocationChange: attrBoolValue(this.skipLocationChange),
+        replaceUrl: attrBoolValue(this.replaceUrl),
+        state: this.state
+      };
+      this.router.navigateByUrl(urlTree, extras);
+      return false;
+    }
+    return true;
   }
 
   private checkRouteAccess() {
@@ -89,38 +141,64 @@ export class SkyHrefDirective implements OnDestroy, OnInit {
       if (this._resolverSubscription) {
         this._resolverSubscription.unsubscribe();
       }
-      this._routeUrl = '';
+      this._route = false;
       try {
         this._resolverSubscription = this.hrefResolver
           .resolveHref$(this._skyHref)
           .subscribe((route) => {
-            if (route.userHasAccess) {
-              this._userHasAccess = true;
-              /* istanbul ignore else */
-              if (this._routeUrl !== route.url) {
-                this._routeUrl = route.url;
-                this.updateTargetUrlAndHref();
-              }
-              this.updateView();
-            } else {
-              this.updateTargetUrlAndHref();
-              this.updateView();
-            }
+            this._route = {...route};
+            this._userHasAccess = route.userHasAccess;
+            this.updateTargetUrlAndView();
           });
       } catch (e) {
-        this.updateTargetUrlAndHref();
-        this.updateView();
+        this.updateTargetUrlAndView();
       }
     }
   }
 
-  private updateTargetUrlAndHref(): void {
-    if (!this._routeUrl || !this._userHasAccess) {
+  private getSkyuxParams(): SkyHrefQueryParams {
+    return typeof this.skyAppConfig.runtime?.params?.getAll === 'function'
+      ? this.skyAppConfig.runtime?.params?.getAll(true)
+      : this.paramsProvider.params?.getAll(true);
+  }
+
+  /* istanbul ignore next */
+  private getUrlTree(): UrlTree | false {
+    if (!this._href || !this.skyAppConfig.skyux.host?.url || !this.skyAppConfig.runtime.app?.base) {
+      return false;
+    }
+    const baseUrl = (
+      this.skyAppConfig.skyux.host.url +
+      this.skyAppConfig.runtime.app.base.substr(0, this.skyAppConfig.runtime.app.base.length - 1)
+    ).toLowerCase();
+
+    if (
+      this._href === baseUrl ||
+      // Make sure the base URL is not simply a partial match of the base URL plus additional
+      // characters after the base URL that are not "terminating" characters
+      this._href.indexOf(baseUrl + '/') === 0 ||
+      this._href.indexOf(baseUrl + '?') === 0
+    ) {
+      const routePath = this._href.substring(baseUrl.length);
+      return this.router.parseUrl(routePath);
+    }
+
+    return false;
+  }
+
+  private updateTargetUrlAndView(): void {
+    if (!this._route || !this._userHasAccess) {
       this.href = '';
+      this.renderer.removeAttribute(this.element.nativeElement, 'href');
+      if (this._skyHrefElse === 'hide') {
+        this.styleDisplay = 'none';
+      } else {
+        this.styleDisplay = '';
+      }
       return;
     }
     let queryParams: SkyHrefQueryParams = {};
-    let [baseUrl, searchFragment] = this._routeUrl.split('?', 2);
+    let [baseUrl, searchFragment] = this._route.url.split('?', 2);
     let search, fragment;
     if (searchFragment) {
       [search, fragment] = searchFragment.split('#', 2);
@@ -144,13 +222,11 @@ export class SkyHrefDirective implements OnDestroy, OnInit {
     this.href = baseUrl +
       (queryParamsMerged.keys().length > 0 ? '?' + queryParamsMerged.toString() : '') +
       (fragment ? `#${fragment}` : '');
+    this.styleDisplay = '';
   }
+}
 
-  private updateView(): void {
-    if (this._skyHrefElse === 'hide') {
-      this.styleDisplay = this._userHasAccess ? '' : 'none';
-    } else {
-      this.styleDisplay = '';
-    }
-  }
+/* istanbul ignore next */
+function attrBoolValue(s: any): boolean {
+  return s === '' || !!s;
 }
