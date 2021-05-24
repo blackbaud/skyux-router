@@ -27,8 +27,7 @@ export class SkyHrefResolverAggregateService {
     for (const hrefResolver of this.hrefResolvers) {
       initQueue.push(hrefResolver.init(config));
     }
-    return Promise.all<void>(initQueue).then(() => {
-    });
+    return Promise.all<void>(initQueue).then(() => {});
   }
 
   public resolveHref$(href: string): Observable<AppRoute> {

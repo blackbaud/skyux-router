@@ -4,7 +4,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { RouterTestingModule } from '@angular/router/testing';
 import { SkyAppConfig, SkyAppRuntimeConfigParamsProvider } from '@skyux/config';
 
-import { HrefFixtureComponent } from './fixtures/href-fixture.component';
+import { HrefDirectiveFixtureComponent } from './fixtures/href-fixture.component';
 import { HrefResolverFixtureService } from './fixtures/href-resolver-fixture.service';
 import { SkyHrefResolverAggregateService } from './href-resolver-aggregate.service';
 import { SKY_HREF_RESOLVER } from './href-resolver-token';
@@ -12,7 +12,7 @@ import { SkyHrefResolverService } from './href-resolver.service';
 import { SkyHrefModule } from './href.module';
 
 describe('SkyHref Directive', () => {
-  let fixture: ComponentFixture<HrefFixtureComponent>;
+  let fixture: ComponentFixture<HrefDirectiveFixtureComponent>;
   let debugElement: DebugElement;
   let getAllParam: boolean;
 
@@ -72,12 +72,12 @@ describe('SkyHref Directive', () => {
     ];
 
     TestBed.configureTestingModule({
-      declarations: [HrefFixtureComponent],
+      declarations: [HrefDirectiveFixtureComponent],
       imports: [RouterTestingModule, SkyHrefModule, HttpClientTestingModule],
       providers
     });
 
-    fixture = TestBed.createComponent(HrefFixtureComponent);
+    fixture = TestBed.createComponent(HrefDirectiveFixtureComponent);
     fixture.detectChanges(); // initial binding
     debugElement = fixture.debugElement;
   }
@@ -96,7 +96,7 @@ describe('SkyHref Directive', () => {
   });
 
   // This does not work b/c host bindings are static for directives.
-  xit('should check availability when the link changes', fakeAsync(() => {
+  it('should check availability when the link changes', fakeAsync(() => {
     setup({}, true);
     fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('.dynamicLink a');
@@ -105,9 +105,9 @@ describe('SkyHref Directive', () => {
     fixture.detectChanges();
     tick(1000);
     expect(element.style.display).toBe('none');
-    // fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/';
-    // fixture.detectChanges();
-    // expect(element.style.display).not.toBe('none');
+    fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/';
+    fixture.detectChanges();
+    expect(element.style.display).not.toBe('none');
   }));
 
   it('should default to local app', () => {

@@ -73,7 +73,7 @@ export class SkyHrefDirective implements OnDestroy, OnInit {
   }
 
   private updateTargetUrlAndHref(): void {
-    if (!this._routeUrl) {
+    if (!this._routeUrl || !this._userHasAccess) {
       this.href = '';
       return;
     }
@@ -132,6 +132,9 @@ export class SkyHrefDirective implements OnDestroy, OnInit {
                   }
                   this.updateView();
                 });
+              } else {
+                this.updateTargetUrlAndHref();
+                this.updateView();
               }
             });
         } catch (e) {

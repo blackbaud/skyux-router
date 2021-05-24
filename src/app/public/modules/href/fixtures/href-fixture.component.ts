@@ -6,7 +6,7 @@ import { SkyHrefQueryParams } from '../href-query-params';
   selector: 'sky-smart-link-fixture',
   templateUrl: 'href-fixture.component.html'
 })
-export class HrefFixtureComponent {
+export class HrefDirectiveFixtureComponent {
   @Input()
   public dynamicLink = '1bb-nav://simple-app/';
 
