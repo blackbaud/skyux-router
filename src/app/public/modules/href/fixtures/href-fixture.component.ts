@@ -14,4 +14,7 @@ export class HrefDirectiveFixtureComponent {
   public queryParams: SkyHrefQueryParams = {
     field: 'value'
   };
+
+  @Input()
+  public dynamicElse = 'hide';
 }

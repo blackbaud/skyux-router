@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SkyAppConfig, SkyAppRuntimeConfigParamsProvider } from '@skyux/config';
 
@@ -95,7 +95,6 @@ describe('SkyHref Directive', () => {
     expect(element.offsetParent).toBeFalsy();
   });
 
-  // This does not work b/c host bindings are static for directives.
   it('should check availability when the link changes', fakeAsync(() => {
     setup({}, true);
     fixture.detectChanges();
@@ -189,4 +188,37 @@ describe('SkyHref Directive', () => {
       'https://example.com/example/page?asdf=123&jkl=mno&query=param&field=value'
     );
   });
+
+  it('should handle an error', fakeAsync(() => {
+    setup({}, true);
+    fixture.detectChanges();
+    const element = fixture.nativeElement.querySelector('.dynamicLink a');
+    expect(element.style.display).not.toBe('none');
+    fixture.componentInstance.dynamicLink = 'error://simple-app/example/page';
+    fixture.detectChanges();
+    tick(1000);
+    expect(element.style.display).toBe('none');
+    fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/';
+    fixture.detectChanges();
+    expect(element.style.display).not.toBe('none');
+  }));
+
+  it('should handle the else parameter', fakeAsync(() => {
+    setup({}, true);
+    fixture.componentInstance.dynamicElse = 'unlink';
+    fixture.componentInstance.dynamicLink = 'nope://simple-app/example/page';
+    fixture.detectChanges();
+    flush();
+    const element = fixture.nativeElement.querySelector('.dynamicLink a');
+    expect(element.style.display).not.toBe('none');
+  }));
+
+  it('should handle link without protocol', fakeAsync(() => {
+    setup({}, true);
+    fixture.componentInstance.dynamicLink = '/example/page';
+    fixture.detectChanges();
+    flush();
+    const element = fixture.nativeElement.querySelector('.dynamicLink a');
+    expect(element.style.display).not.toBe('none');
+  }));
 });

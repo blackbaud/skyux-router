@@ -6,7 +6,7 @@ import { AppRoute } from '../types/app-route';
 
 @Injectable()
 export class HrefResolverFixtureService implements SkyHrefResolverInterface {
-  public protocols: string[] = ['test', '1bb-nav', 'nope'];
+  public protocols: string[] = ['test', '1bb-nav', 'nope', 'error'];
 
   public init(config: SkyAppConfig): Promise<void> {
     return Promise.resolve(undefined);
@@ -36,6 +36,8 @@ export class HrefResolverFixtureService implements SkyHrefResolverInterface {
         route: '/test',
         app: 'test'
       });
+    } else if (url.startsWith('error://')) {
+      throw new Error(`Error while resolving ${url}`);
     }
   }
 
