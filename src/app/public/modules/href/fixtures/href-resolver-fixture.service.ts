@@ -1,37 +1,31 @@
 import { Injectable } from '@angular/core';
 import { SkyHrefResolver } from '../href-resolver';
-import { AppRoute } from '../types/app-route';
+import { SkyHref } from '../types/href';
 
 @Injectable()
 export class HrefResolverFixtureService implements SkyHrefResolver {
-  public resolveHref(url: string): Promise<AppRoute> {
+  public resolveHref(param: {url: string}): Promise<SkyHref> {
+    const url = param.url;
+    const path = url.substring(url.indexOf('/', url.indexOf('://') + 3));
     if (url.startsWith('test://')) {
-      return Promise.resolve<AppRoute>({
-        url: url.replace(/^test:\/\/[^\/]+/, 'https://success'),
-        userHasAccess: true,
-        route: '/test',
-        app: 'test'
+      return Promise.resolve<SkyHref>({
+        url: 'https://success' + path,
+        userHasAccess: true
       });
     } else if (url.startsWith('1bb-nav://')) {
-      return Promise.resolve<AppRoute>({
-        url: url
-          .replace(/[^:]+:\/\/[^\/]*/, 'https://example.com')
-          .replace(/$/, '?query=param'),
-        userHasAccess: true,
-        route: '/test',
-        app: 'test'
+      return Promise.resolve<SkyHref>({
+        url: 'https://example.com' + path + '?query=param',
+        userHasAccess: true
       });
     } else if (url.startsWith('nope://')) {
-      return Promise.resolve<AppRoute>({
+      return Promise.resolve<SkyHref>({
         url,
-        userHasAccess: false,
-        route: '/test',
-        app: 'test'
+        userHasAccess: false
       });
     } else if (url.startsWith('error://')) {
       throw new Error(`Error while resolving ${url}`);
     } else {
-      return Promise.resolve<AppRoute>({
+      return Promise.resolve<SkyHref>({
         url,
         userHasAccess: true
       });

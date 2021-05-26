@@ -9,12 +9,11 @@ import {
 } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 import { SkyAppConfig, SkyAppRuntimeConfigParamsProvider } from '@skyux/config';
-import { Subject } from 'rxjs';
 
 import { SkyHrefQueryParams } from './href-query-params';
 import { SkyHrefResolverService } from './href-resolver.service';
 
-import { AppRoute } from './types/app-route';
+import { SkyHref } from './types/href';
 
 type HrefChanges = { href: string, styleDisplay: string };
 
@@ -35,7 +34,7 @@ export class SkyHrefDirective {
   @Input()
   public set queryParams(value: SkyHrefQueryParams) {
     this._queryParams = value;
-    this._changes.next(this.getChanges());
+    this.applyChanges(this.getChanges());
   }
 
   @Input()
@@ -47,12 +46,10 @@ export class SkyHrefDirective {
   @Input()
   public set skyHrefElse(value: 'hide' | 'unlink') {
     this._skyHrefElse = value;
-    this._changes.next(this.getChanges());
+    this.applyChanges(this.getChanges());
   }
 
-  private _changes: Subject<HrefChanges>;
-
-  private _route: AppRoute | false = false;
+  private _route: SkyHref | false = false;
 
   private _userHasAccess = false;
 
@@ -72,15 +69,6 @@ export class SkyHrefDirective {
     @Optional() private paramsProvider?: SkyAppRuntimeConfigParamsProvider,
     @Optional() private hrefResolver?: SkyHrefResolverService
   ) {
-    this._changes = new Subject<HrefChanges>();
-    this._changes.subscribe((change) => {
-      this.renderer.setStyle(this.element.nativeElement, 'display', change.styleDisplay);
-      if (change.href) {
-        this.renderer.setAttribute(this.element.nativeElement, 'href', change.href);
-      } else {
-        this.renderer.removeAttribute(this.element.nativeElement, 'href');
-      }
-    });
   }
 
   /* istanbul ignore next */
@@ -115,6 +103,15 @@ export class SkyHrefDirective {
     return true;
   }
 
+  private applyChanges(change: HrefChanges) {
+    this.renderer.setStyle(this.element.nativeElement, 'display', change.styleDisplay);
+    if (change.href) {
+      this.renderer.setAttribute(this.element.nativeElement, 'href', change.href);
+    } else {
+      this.renderer.removeAttribute(this.element.nativeElement, 'href');
+    }
+  }
+
   private checkRouteAccess() {
     this._userHasAccess = false;
     this._route = false;
@@ -122,17 +119,17 @@ export class SkyHrefDirective {
     if (this.hrefResolver && this._skyHref) {
       try {
         this.hrefResolver
-          .resolveHref(this._skyHref)
+          .resolveHref({url: this._skyHref})
           .then((route) => {
             this._route = {...route};
             this._userHasAccess = route.userHasAccess;
-            this._changes.next(this.getChanges());
+            this.applyChanges(this.getChanges());
           });
       } catch (error) {
-        this._changes.next(this.getChanges());
+        this.applyChanges(this.getChanges());
       }
     } else {
-      this._changes.next(this.getChanges());
+      this.applyChanges(this.getChanges());
     }
   }
 

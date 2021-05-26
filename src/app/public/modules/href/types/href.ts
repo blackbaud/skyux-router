@@ -1,4 +1,4 @@
-export interface AppRoute {
+export interface SkyHref {
   app?: string;
   route?: string;
   url: string;

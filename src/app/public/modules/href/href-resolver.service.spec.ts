@@ -1,36 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import { HrefResolverFixtureService } from './fixtures/href-resolver-fixture.service';
 import { SkyHrefResolverService } from './href-resolver.service';
 
 describe('HREF Resolver Service', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: SkyHrefResolverService,
-          useClass: HrefResolverFixtureService
-        }
-      ]
-    });
-  });
-
-  it('should resolve an href through fixture', () => {
-    const fixtureService = new HrefResolverFixtureService();
-
-    let resolved = false;
-    fixtureService.resolveHref('nope://example.com/page').then((route) => {
-      resolved = true;
-      expect(route.userHasAccess).toBeFalse();
-    }).finally(() => {
-      expect(resolved).toBeTrue();
-    });
-  });
-
-  it('should resolve an https href', () => {
+  it('should resolve an https href', async () => {
     const fixtureService = new SkyHrefResolverService();
 
     let resolved = false;
-    fixtureService.resolveHref('https://example.com/page').then((route) => {
+    return fixtureService.resolveHref({url: 'https://example.com/page'}).then((route) => {
       resolved = true;
       expect(route.userHasAccess).toBeTrue();
     }).finally(() => {

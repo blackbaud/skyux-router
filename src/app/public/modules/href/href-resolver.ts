@@ -1,5 +1,5 @@
-import { AppRoute } from './types/app-route';
+import { SkyHref } from './types/href';
 
 export interface SkyHrefResolver {
-  resolveHref(url: string): Promise<AppRoute>;
+  resolveHref(param: {url: string}): Promise<SkyHref>;
 }

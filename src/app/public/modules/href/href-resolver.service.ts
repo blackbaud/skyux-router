@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 
 import { SkyHrefResolver } from './href-resolver';
-import { AppRoute } from './types/app-route';
+import { SkyHref } from './types/href';
 
 /**
  * Return the link as-is.
  */
 @Injectable()
 export class SkyHrefResolverService implements SkyHrefResolver {
-  public resolveHref(url: string): Promise<AppRoute> {
-    return Promise.resolve<AppRoute>({
-      url,
+  public resolveHref(param: {url: string}): Promise<SkyHref> {
+    return Promise.resolve<SkyHref>({
+      url: param.url,
       userHasAccess: true
     });
   }
