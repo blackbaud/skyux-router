@@ -21,22 +21,6 @@ type HrefChanges = { href: string, styleDisplay: string };
   selector: '[skyHref]'
 })
 export class SkyHrefDirective {
-
-  @Input()
-  public skipLocationChange = false;
-
-  @Input()
-  public replaceUrl = false;
-
-  @Input()
-  public state?: {[k: string]: any};
-
-  @Input()
-  public set queryParams(value: SkyHrefQueryParams) {
-    this._queryParams = value;
-    this.applyChanges(this.getChanges());
-  }
-
   @Input()
   public set skyHref(skyHref: string) {
     this._skyHref = skyHref;
@@ -54,8 +38,6 @@ export class SkyHrefDirective {
   private _userHasAccess = false;
 
   private _href: string;
-
-  private _queryParams: Object = {};
 
   private _skyHref = '';
 
@@ -92,12 +74,7 @@ export class SkyHrefDirective {
 
     const urlTree = this.getUrlTree();
     if (urlTree) {
-      const extras = {
-        skipLocationChange: attrBoolValue(this.skipLocationChange),
-        replaceUrl: attrBoolValue(this.replaceUrl),
-        state: this.state
-      };
-      this.router.navigateByUrl(urlTree, extras);
+      this.router.navigateByUrl(urlTree);
       return false;
     }
     return true;
@@ -164,8 +141,7 @@ export class SkyHrefDirective {
         fromObject: Object.assign(
           {},
           this.getSkyuxParams() || {},
-          queryParams || {},
-          this._queryParams || {}
+          queryParams || {}
         )
       });
 
@@ -205,15 +181,10 @@ export class SkyHrefDirective {
       href.indexOf(baseUrl + '/') === 0 ||
       href.indexOf(baseUrl + '?') === 0
     ) {
-      const routePath = href.substring(baseUrl.length);
+      const routePath = this._href.substring(baseUrl.length);
       return this.router.parseUrl(routePath);
     }
 
     return false;
   }
-}
-
-/* istanbul ignore next */
-function attrBoolValue(s: any): boolean {
-  return s === '' || !!s;
 }

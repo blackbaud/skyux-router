@@ -72,7 +72,7 @@ describe('SkyHref Directive', () => {
 
     tick(100);
     const links = Array.from(fixture.nativeElement.querySelectorAll('a'));
-    expect(links.filter((e: HTMLElement) => !!e.offsetParent).length).toEqual(6);
+    expect(links.filter((e: HTMLElement) => !!e.offsetParent).length).toEqual(5);
   }));
 
   it('should hide links that the user cannot access', fakeAsync(() => {
@@ -136,24 +136,14 @@ describe('SkyHref Directive', () => {
   }));
 
   it('should override query parameters', fakeAsync(() => {
-    setup({}, false);
-    fixture.componentInstance.queryParams = {query: 'override'};
+    setup({ query: 'param' }, false);
+    fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/example/page?query=override';
     fixture.detectChanges();
 
     tick(100);
-    const element = debugElement.nativeElement.querySelector('.queryLink a');
+    const element = debugElement.nativeElement.querySelector('.dynamicLink a');
     expect(element.getAttribute('href')).toEqual(
       'https://example.com/example/page?query=override'
-    );
-  }));
-
-  it('should set href with queryParams supplied by the queryParams attribute', fakeAsync(() => {
-    setup({}, true);
-
-    tick(100);
-    const element = debugElement.nativeElement.querySelector('.queryLink a');
-    expect(element.getAttribute('href')).toEqual(
-      'https://example.com/example/page?query=param&field=value'
     );
   }));
 
@@ -167,9 +157,9 @@ describe('SkyHref Directive', () => {
     );
 
     tick(100);
-    const element = debugElement.nativeElement.querySelector('.queryLink a');
+    const element = debugElement.nativeElement.querySelector('.simpleLink a');
     expect(element.getAttribute('href')).toEqual(
-      'https://example.com/example/page?asdf=123&jkl=mno&query=param&field=value'
+      'https://example.com/example/page?asdf=123&jkl=mno&query=param'
     );
   }));
 
@@ -189,9 +179,9 @@ describe('SkyHref Directive', () => {
     );
 
     tick(100);
-    const element = fixture.nativeElement.querySelector('.queryLink a');
+    const element = fixture.nativeElement.querySelector('.simpleLink a');
     expect(element.getAttribute('href')).toEqual(
-      'https://example.com/example/page?asdf=123&jkl=mno&query=param&field=value'
+      'https://example.com/example/page?asdf=123&jkl=mno&query=param'
     );
   }));
 
