@@ -95,7 +95,7 @@ describe('SkyHref Directive', () => {
     tick(100);
     expect(element.style.display).toBe('none');
 
-    fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/';
+    fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/allowed';
     fixture.detectChanges();
     tick(100);
     expect(element.style.display).not.toBe('none');
@@ -109,7 +109,7 @@ describe('SkyHref Directive', () => {
     expect(element.textContent).toBe('Example');
   }));
 
-  it('should set href without any queryParams', fakeAsync(() => {
+  it('should set href without any query parameters', fakeAsync(() => {
     setup({}, false);
 
     tick(100);
@@ -119,7 +119,7 @@ describe('SkyHref Directive', () => {
     );
   }));
 
-  it('should set href with queryParams', fakeAsync(() => {
+  it('should set href with query parameters', fakeAsync(() => {
     setup(
       {
         asdf: 123,
@@ -147,7 +147,7 @@ describe('SkyHref Directive', () => {
     );
   }));
 
-  it('should set href with merged queryParams supplied by the queryParams attribute and app config', fakeAsync(() => {
+  it('should set href with merged query parameters supplied by the app config', fakeAsync(() => {
     setup(
       {
         asdf: 123,
@@ -197,7 +197,7 @@ describe('SkyHref Directive', () => {
     tick(100);
     expect(element.style.display).toBe('none');
 
-    fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/';
+    fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/fixed';
     fixture.detectChanges();
     tick(100);
     expect(element.style.display).not.toBe('none');
