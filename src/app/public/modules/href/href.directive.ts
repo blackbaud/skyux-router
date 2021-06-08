@@ -15,7 +15,7 @@ import { SkyHrefResolverService } from './href-resolver.service';
 
 import { SkyHref } from './types/href';
 
-type HrefChanges = { href: string, styleDisplay: string };
+type HrefChanges = { href: string, hidden: boolean };
 
 @Directive({
   selector: '[skyHref]'
@@ -81,7 +81,12 @@ export class SkyHrefDirective {
   }
 
   private applyChanges(change: HrefChanges) {
-    this.renderer.setStyle(this.element.nativeElement, 'display', change.styleDisplay);
+    this.renderer.addClass(this.element.nativeElement, 'sky-href');
+    if (change.hidden) {
+      this.renderer.setAttribute(this.element.nativeElement, 'hidden', 'hidden');
+    } else {
+      this.renderer.removeAttribute(this.element.nativeElement, 'hidden');
+    }
     if (change.href) {
       this.renderer.setAttribute(this.element.nativeElement, 'href', change.href);
     } else {
@@ -106,6 +111,12 @@ export class SkyHrefDirective {
         this.applyChanges(this.getChanges());
       }
     } else {
+      // no resolver or skyHref is falsy
+      this._route = {
+        url: this._skyHref || '',
+        userHasAccess: !!this._skyHref
+      };
+      this._userHasAccess = this._route.userHasAccess;
       this.applyChanges(this.getChanges());
     }
   }
@@ -120,7 +131,7 @@ export class SkyHrefDirective {
     if (!this._route || !this._userHasAccess) {
       return {
         href: '',
-        styleDisplay: this._skyHrefElse === 'hide' ? 'none' : ''
+        hidden: this._skyHrefElse === 'hide'
       };
     } else {
       [baseUrl, searchFragment] = this._route.url.split('?', 2);
@@ -150,22 +161,22 @@ export class SkyHrefDirective {
         (fragment ? `#${fragment}` : '');
       return {
         href: this._href,
-        styleDisplay: ''
+        hidden: false
       };
     }
   }
 
   private getSkyuxParams(): SkyHrefQueryParams {
-    return typeof this.skyAppConfig.runtime?.params?.getAll === 'function'
-      ? this.skyAppConfig.runtime?.params?.getAll(true)
-      : this.paramsProvider.params?.getAll(true);
+    return typeof this.skyAppConfig?.runtime?.params?.getAll === 'function'
+      ? this.skyAppConfig?.runtime?.params?.getAll(true)
+      : this.paramsProvider?.params?.getAll(true);
   }
 
   /* istanbul ignore next */
   private getUrlTree(): UrlTree | false {
     const href = this._href.toLowerCase();
 
-    if (!href || !this.skyAppConfig.skyux.host?.url || !this.skyAppConfig.runtime.app?.base) {
+    if (!href || !this.skyAppConfig?.skyux.host?.url || !this.skyAppConfig?.runtime?.app?.base) {
       return false;
     }
 
