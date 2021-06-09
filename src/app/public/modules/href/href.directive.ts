@@ -35,8 +35,6 @@ export class SkyHrefDirective {
 
   private _route: SkyHref | false = false;
 
-  private _userHasAccess = false;
-
   private _href: string;
 
   private _skyHref = '';
@@ -59,7 +57,7 @@ export class SkyHrefDirective {
     ['$event.button', '$event.ctrlKey', '$event.shiftKey', '$event.altKey', '$event.metaKey'])
   public onClick(button: number, ctrlKey: boolean, shiftKey: boolean, altKey: boolean, metaKey: boolean):
     boolean {
-    if (!this._userHasAccess) {
+    if (!this._route || !this._route.userHasAccess) {
       return false;
     }
 
@@ -95,16 +93,18 @@ export class SkyHrefDirective {
   }
 
   private checkRouteAccess() {
-    this._userHasAccess = false;
-    this._route = false;
+    this._route = {
+      url: this._skyHref || '',
+      userHasAccess: false
+    };
     /* istanbul ignore else */
     if (this.hrefResolver && this._skyHref) {
+      this.applyChanges(this.getChanges());
       try {
         this.hrefResolver
           .resolveHref({url: this._skyHref})
           .then((route) => {
             this._route = {...route};
-            this._userHasAccess = route.userHasAccess;
             this.applyChanges(this.getChanges());
           });
       } catch (error) {
@@ -112,11 +112,7 @@ export class SkyHrefDirective {
       }
     } else {
       // no resolver or skyHref is falsy
-      this._route = {
-        url: this._skyHref || '',
-        userHasAccess: !!this._skyHref
-      };
-      this._userHasAccess = this._route.userHasAccess;
+      this._route.userHasAccess = !!this._skyHref;
       this.applyChanges(this.getChanges());
     }
   }
@@ -128,7 +124,7 @@ export class SkyHrefDirective {
     let search: string;
     let fragment: string;
 
-    if (!this._route || !this._userHasAccess) {
+    if (!this._route || !this._route.userHasAccess) {
       return {
         href: '',
         hidden: this._skyHrefElse === 'hide'
