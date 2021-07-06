@@ -1,6 +1,6 @@
 {
   "name": "@skyux/router",
-  "version": "4.2.1",
+  "version": "5.0.0-beta.0",
   "description": "SKY UX Router",
   "scripts": {
     "build": "skyux build-public-library",
@@ -23,8 +23,8 @@
     "@angular/common": "^9.1.6 || ^12",
     "@angular/core": "^9.1.6 || ^12",
     "@angular/router": "^9.1.6 || ^12",
-    "@skyux/config": "^4.3.0",
-    "@skyux/core": "^4.0.0"
+    "@skyux/config": "^5.0.0-beta.0",
+    "@skyux/core": "^5.0.0-beta.0"
   },
   "dependencies": {},
   "devDependencies": {
