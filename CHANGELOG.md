@@ -2,6 +2,9 @@
 
 - Initial beta release. []()
 - Added support for `@angular/core@^12`. []()
+# 4.2.2 (2021-06-09)
+
+- Added the `sky-href` class for the link style, added handling for the null config and resolver, and switched to using the `hidden` attribute when hiding `skyHref` links. [#29](https://github.com/blackbaud/skyux-router/pull/29)
 
 # 4.2.1 (2021-06-03)
 
