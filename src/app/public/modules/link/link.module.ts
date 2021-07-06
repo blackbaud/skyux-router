@@ -3,10 +3,6 @@ import {
 } from '@angular/core';
 
 import {
-  SkyAppWindowRef
-} from '@skyux/core';
-
-import {
   SkyAppLinkDirective
 } from './link.directive';
 
