@@ -1,3 +1,8 @@
+# 5.0.0-beta.0 (2021-07-06)
+
+- Initial beta release. []()
+- Added support for `@angular/core@^12`. []()
+
 # 4.2.1 (2021-06-03)
 
 - Fixed `SkyAppLinkExternalDirective` to properly include query parameters on link URLs. [#27](https://github.com/blackbaud/skyux-router/pull/27)

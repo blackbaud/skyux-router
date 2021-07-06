@@ -22,9 +22,6 @@ import {
   exports: [
     SkyAppLinkDirective,
     SkyAppLinkExternalDirective
-  ],
-  providers: [
-    SkyAppWindowRef
   ]
 })
 /* istanbul ignore next */
