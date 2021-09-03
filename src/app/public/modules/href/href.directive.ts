@@ -119,8 +119,6 @@ export class SkyHrefDirective {
 
   private getChanges(): HrefChanges {
     let queryParams: SkyHrefQueryParams = {};
-    let baseUrl: string;
-    let search: string | undefined;
 
     if (!this._route || !this._route.userHasAccess) {
       return {
@@ -128,10 +126,8 @@ export class SkyHrefDirective {
         hidden: this._skyHrefElse === 'hide'
       };
     } else {
-      const url = this._route.url;
-
-      const [beforeFragment, fragment] = url.split('#', 2);
-      [baseUrl, search] = beforeFragment.split('?', 2);
+      const [beforeFragment, fragment] = this._route.url.split('#', 2);
+      const [baseUrl, search] = beforeFragment.split('?', 2);
 
       if (search) {
         const searchParams = new HttpParams({fromString: search});
