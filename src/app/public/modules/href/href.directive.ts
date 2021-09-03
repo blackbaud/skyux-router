@@ -94,7 +94,7 @@ export class SkyHrefDirective {
 
   private checkRouteAccess() {
     this._route = {
-      url: this._skyHref || '',
+      url: this._skyHref,
       userHasAccess: false
     };
     /* istanbul ignore else */
@@ -120,9 +120,7 @@ export class SkyHrefDirective {
   private getChanges(): HrefChanges {
     let queryParams: SkyHrefQueryParams = {};
     let baseUrl: string;
-    let searchFragment: string;
-    let search: string;
-    let fragment: string;
+    let search: string | undefined;
 
     if (!this._route || !this._route.userHasAccess) {
       return {
@@ -130,12 +128,10 @@ export class SkyHrefDirective {
         hidden: this._skyHrefElse === 'hide'
       };
     } else {
-      [baseUrl, searchFragment] = this._route.url.split('?', 2);
-      if (searchFragment) {
-        [search, fragment] = searchFragment.split('#', 2);
-      } else {
-        [search, fragment] = ['', ''];
-      }
+      const url = this._route.url;
+
+      const [beforeFragment, fragment] = url.split('#', 2);
+      [baseUrl, search] = beforeFragment.split('?', 2);
 
       if (search) {
         const searchParams = new HttpParams({fromString: search});
@@ -147,8 +143,8 @@ export class SkyHrefDirective {
       const queryParamsMerged = new HttpParams({
         fromObject: Object.assign(
           {},
-          this.getSkyuxParams() || {},
-          queryParams || {}
+          this.getSkyuxParams(),
+          queryParams
         )
       });
 
@@ -163,9 +159,9 @@ export class SkyHrefDirective {
   }
 
   private getSkyuxParams(): SkyHrefQueryParams {
-    return typeof this.skyAppConfig?.runtime?.params?.getAll === 'function'
-      ? this.skyAppConfig?.runtime?.params?.getAll(true)
-      : this.paramsProvider?.params?.getAll(true);
+    return typeof this.skyAppConfig.runtime.params?.getAll === 'function'
+      ? this.skyAppConfig.runtime.params.getAll(true)
+      : this.paramsProvider.params.getAll(true);
   }
 
   /* istanbul ignore next */
