@@ -5,3 +5,6 @@ export * from './modules/href/href-resolver';
 export * from './modules/href/href-resolver.service';
 export * from './modules/href/types/href';
 export * from './modules/href/types/href-resolver.args';
+export { SkyHrefDirective as ƛ1 } from './modules/href/href.directive';
+export { SkyAppLinkExternalDirective as ƛ2 } from './modules/link/link-external.directive';
+export { SkyAppLinkDirective as ƛ3 } from './modules/link/link.directive';
