@@ -1,3 +1,7 @@
+# 5.0.0-beta.1 (2021-09-13)
+
+- Migrated to Angular CLI. [#34](https://github.com/blackbaud/skyux-router/pull/34)
+
 # 5.0.0-beta.0 (2021-07-06)
 
 - Initial beta release. [#31](https://github.com/blackbaud/skyux-router/pull/31)
