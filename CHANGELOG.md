@@ -1,6 +1,6 @@
 # 5.0.0-beta.2 (2021-09-14)
 
-- Fixed the `skyHref` directive to handle scenarios where `SkyAppConfig` is not provided. []()
+- Fixed the `skyHref` directive to handle scenarios where `SkyAppConfig` is not provided. [#36](https://github.com/blackbaud/skyux-router/pull/36)
 
 # 5.0.0-beta.1 (2021-09-13)
 
