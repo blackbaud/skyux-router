@@ -10,7 +10,7 @@ export class HrefDirectiveFixtureComponent {
   public dynamicLink = '1bb-nav://simple-app/';
 
   @Input()
-  public dynamicElse: 'hide' | 'unlink' = 'hide';
+  public dynamicElse = 'hide';
 
   @Input()
   public parameters: SkyHrefParameters;

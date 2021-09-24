@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SkyAppConfig, SkyAppRuntimeConfigParamsProvider } from '@skyux/config';
 
@@ -70,7 +70,7 @@ describe('SkyHref Directive', () => {
   it('should create links', fakeAsync(() => {
     setup({}, false);
 
-    tick();
+    tick(100);
     const links = Array.from(fixture.nativeElement.querySelectorAll('a'));
     expect(links.filter((e: HTMLElement) => !!e.offsetParent).length).toEqual(6);
   }));
@@ -78,7 +78,7 @@ describe('SkyHref Directive', () => {
   it('should hide links that the user cannot access', fakeAsync(() => {
     setup({}, true);
 
-    tick();
+    tick(100);
     const element = debugElement.nativeElement.querySelector('.noAccessLink a');
     expect(element.offsetParent).toBeFalsy();
   }));
@@ -86,25 +86,25 @@ describe('SkyHref Directive', () => {
   it('should check availability when the link changes', fakeAsync(() => {
     setup({}, true);
 
-    tick();
+    tick(100);
     const element = fixture.nativeElement.querySelector('.dynamicLink a');
     expect(element.getAttribute('hidden')).toBeNull();
 
     fixture.componentInstance.dynamicLink = 'nope://simple-app/example/page';
     fixture.detectChanges();
-    tick();
+    tick(100);
     expect(element.getAttribute('hidden')).toBe('hidden');
 
     fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/allowed';
     fixture.detectChanges();
-    tick();
+    tick(100);
     expect(element.getAttribute('hidden')).toBeNull();
   }));
 
   it('should default to local app', fakeAsync(() => {
     setup({}, true);
 
-    tick();
+    tick(100);
     const element = debugElement.nativeElement.querySelector('.localLink');
     expect(element.textContent).toBe('Example');
   }));
@@ -112,7 +112,7 @@ describe('SkyHref Directive', () => {
   it('should set href without any query parameters', fakeAsync(() => {
     setup({}, false);
 
-    tick();
+    tick(100);
     const element = debugElement.nativeElement.querySelector('.simpleLink a');
     expect(element.getAttribute('href')).toEqual(
       'https://example.com/example/page?query=param'
@@ -128,7 +128,7 @@ describe('SkyHref Directive', () => {
       false
     );
 
-    tick();
+    tick(100);
     const element = debugElement.nativeElement.querySelector('.simpleLink a');
     expect(element.getAttribute('href')).toEqual(
       'https://example.com/example/page?asdf=123&jkl=mno&query=param'
@@ -140,7 +140,7 @@ describe('SkyHref Directive', () => {
     fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/example/page?query=override';
     fixture.detectChanges();
 
-    tick();
+    tick(100);
     const element = debugElement.nativeElement.querySelector('.dynamicLink a');
     expect(element.getAttribute('href')).toEqual(
       'https://example.com/example/page?query=override'
@@ -156,7 +156,7 @@ describe('SkyHref Directive', () => {
       true
     );
 
-    tick();
+    tick(100);
     const element = debugElement.nativeElement.querySelector('.simpleLink a');
     expect(element.getAttribute('href')).toEqual(
       'https://example.com/example/page?asdf=123&jkl=mno&query=param'
@@ -178,7 +178,7 @@ describe('SkyHref Directive', () => {
       false
     );
 
-    tick();
+    tick(100);
     const element = fixture.nativeElement.querySelector('.simpleLink a');
     expect(element.getAttribute('href')).toEqual(
       'https://example.com/example/page?asdf=123&jkl=mno&query=param'
@@ -188,18 +188,18 @@ describe('SkyHref Directive', () => {
   it('should handle an error', fakeAsync(() => {
     setup({}, true);
 
-    tick();
+    tick(100);
     const element = fixture.nativeElement.querySelector('.dynamicLink a');
     expect(element.getAttribute('hidden')).toBeNull();
 
     fixture.componentInstance.dynamicLink = 'error://simple-app/example/page';
     fixture.detectChanges();
-    tick();
+    tick(100);
     expect(element.getAttribute('hidden')).toBe('hidden');
 
     fixture.componentInstance.dynamicLink = '1bb-nav://simple-app/fixed';
     fixture.detectChanges();
-    tick();
+    tick(100);
     expect(element.getAttribute('hidden')).toBeNull();
   }));
 
@@ -209,7 +209,7 @@ describe('SkyHref Directive', () => {
     fixture.componentInstance.dynamicElse = 'unlink';
     fixture.componentInstance.dynamicLink = 'nope://simple-app/example/page';
     fixture.detectChanges();
-    tick();
+    flush();
 
     const element = fixture.nativeElement.querySelector('.dynamicLink a');
     expect(element.style.display).not.toBe('none');
@@ -234,7 +234,7 @@ describe('SkyHref Directive', () => {
     );
 
     fixture.detectChanges();
-    tick();
+    tick(100);
 
     const element = fixture.nativeElement.querySelector('.fragmentLink a');
     expect(element.getAttribute('href')).toEqual(
@@ -248,13 +248,13 @@ describe('SkyHref Directive', () => {
     fixture.componentInstance.dynamicLink = 'test://simple-app/example/:record/:detail';
     fixture.componentInstance.parameters = { 'record': '123', 'detail': 'abc' };
     fixture.detectChanges();
-    tick();
+    tick(100);
     const element = fixture.nativeElement.querySelector('.dynamicLink a');
     expect(element.getAttribute('href')).toBe('https://success/example/123/abc');
 
     fixture.componentInstance.dynamicLink = 'test://simple-app/example/:record/:detail/:extra';
     fixture.detectChanges();
-    tick();
+    tick(100);
     expect(element.getAttribute('href')).toBe('https://success/example/123/abc/:extra');
 
     try {
