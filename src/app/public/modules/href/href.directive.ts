@@ -142,8 +142,8 @@ export class SkyHrefDirective {
         const validParameter = /^[-_a-z0-9]+$/i;
         Object.keys(this._skyHrefParameters).forEach((param) => {
           if (validParameter.test(param)) {
-            const paramReplacement = new RegExp(`(?<=/):${param}(?=/|$)`);
-            baseUrl = baseUrl.replace(paramReplacement, this._skyHrefParameters[param]);
+            const paramReplacement = new RegExp(`/:${param}(/|$)`);
+            baseUrl = baseUrl.replace(paramReplacement, `/${encodeURIComponent(this._skyHrefParameters[param])}$1`);
           } else {
             throw new Error(`Invalid parameter name ${JSON.stringify(param)}`);
           }
