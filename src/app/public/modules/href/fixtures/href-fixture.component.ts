@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { SkyHrefParameters } from '../types/href-parameters';
 
 @Component({
   selector: 'sky-smart-link-fixture',
@@ -9,5 +10,8 @@ export class HrefDirectiveFixtureComponent {
   public dynamicLink = '1bb-nav://simple-app/';
 
   @Input()
-  public dynamicElse = 'hide';
+  public dynamicElse: 'hide' | 'unlink' = 'hide';
+
+  @Input()
+  public parameters: SkyHrefParameters;
 }
