@@ -14,7 +14,6 @@ import { SkyHrefQueryParams } from './href-query-params';
 import { SkyHrefResolverService } from './href-resolver.service';
 
 import { SkyHref } from './types/href';
-import { SkyHrefParameters } from './types/href-parameters';
 
 type HrefChanges = { href: string, hidden: boolean };
 
@@ -22,21 +21,34 @@ type HrefChanges = { href: string, hidden: boolean };
   selector: '[skyHref]'
 })
 export class SkyHrefDirective {
+  /**
+   * Provide a link as a string or as an array of strings or objects that can be joined by a slash to form a complete
+   * URL.
+   *
+   * @param skyHref
+   */
   @Input()
-  public set skyHref(skyHref: string) {
-    this._skyHref = skyHref;
+  public set skyHref(skyHref: string | any[]) {
+    if (typeof skyHref === 'string') {
+      this._skyHref = skyHref;
+    } else {
+      this._skyHref = skyHref.map((piece) => {
+        if (typeof piece === 'string') {
+          return piece;
+        } else if (Array.isArray(piece)) {
+          return piece.map((sub) => `${sub}`).join('/');
+        } else {
+          return Object.values(piece).map((sub) => `${sub}`).join('/');
+        }
+      }).join('/');
+    }
+
     this.checkRouteAccess();
   }
 
   @Input()
   public set skyHrefElse(value: 'hide' | 'unlink') {
     this._skyHrefElse = value;
-    this.applyChanges(this.getChanges());
-  }
-
-  @Input()
-  public set skyHrefParameters(parameters: SkyHrefParameters) {
-    this._skyHrefParameters = parameters;
     this.applyChanges(this.getChanges());
   }
 
@@ -47,8 +59,6 @@ export class SkyHrefDirective {
   private _skyHref = '';
 
   private _skyHrefElse: 'hide' | 'unlink' = 'hide';
-
-  private _skyHrefParameters: SkyHrefParameters;
 
   constructor(
     private router: Router,
@@ -136,19 +146,7 @@ export class SkyHrefDirective {
       };
     } else {
       const [beforeFragment, fragment] = this._route.url.split('#', 2);
-      let [baseUrl, search] = beforeFragment.split('?', 2);
-
-      if (this._skyHrefParameters) {
-        const validParameter = /^[-_a-z0-9]+$/i;
-        Object.keys(this._skyHrefParameters).forEach((param) => {
-          if (validParameter.test(param)) {
-            const paramReplacement = new RegExp(`/:${param}(/|$)`);
-            baseUrl = baseUrl.replace(paramReplacement, `/${encodeURIComponent(this._skyHrefParameters[param])}$1`);
-          } else {
-            throw new Error(`Invalid parameter name ${JSON.stringify(param)}`);
-          }
-        });
-      }
+      const [baseUrl, search] = beforeFragment.split('?', 2);
 
       if (search) {
         const searchParams = new HttpParams({fromString: search});
