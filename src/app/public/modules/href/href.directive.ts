@@ -22,25 +22,17 @@ type HrefChanges = { href: string, hidden: boolean };
 })
 export class SkyHrefDirective {
   /**
-   * Provide a link as a string or as an array of strings or objects that can be joined by a slash to form a complete
+   * Provide a link as a string or as an array of strings to be joined by a slash to form a complete
    * URL.
    *
    * @param skyHref
    */
   @Input()
-  public set skyHref(skyHref: string | any[]) {
+  public set skyHref(skyHref: string | string[]) {
     if (typeof skyHref === 'string') {
       this._skyHref = skyHref;
     } else {
-      this._skyHref = skyHref.map((piece) => {
-        if (typeof piece === 'string') {
-          return piece;
-        } else if (Array.isArray(piece)) {
-          return piece.map((sub) => `${sub}`).join('/');
-        } else {
-          return Object.values(piece).map((sub) => `${sub}`).join('/');
-        }
-      }).join('/');
+      this._skyHref = skyHref.join('/');
     }
 
     this.checkRouteAccess();

@@ -251,14 +251,9 @@ describe('SkyHref Directive', () => {
     const element = fixture.nativeElement.querySelector('.dynamicLink a');
     expect(element.getAttribute('hidden')).toBeNull();
 
-    fixture.componentInstance.dynamicLink = ['test://simple-app', ['allowed', 'to', 'be', 'complicated']];
+    fixture.componentInstance.dynamicLink = ['test://simple-app', 'allowed', 'to', 'be', 'complicated'];
     fixture.detectChanges();
     tick(100);
     expect(element.getAttribute('href')).toBe('https://success/allowed/to/be/complicated');
-
-    fixture.componentInstance.dynamicLink = ['test://simple-app', {weird: 'options', are: 'ok'}];
-    fixture.detectChanges();
-    tick(100);
-    expect(element.getAttribute('href')).toBe('https://success/options/ok');
   }));
 });
