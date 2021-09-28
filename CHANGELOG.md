@@ -1,3 +1,11 @@
+# 5.0.0-beta.3 (2021-09-28)
+
+- Added bug fixes and features from the `master` branch. [#39](https://github.com/blackbaud/skyux-router/pull/39)
+
+# 4.3.0 (2021-09-28)
+
+- Updated the `skyHref` directive to support using array inputs for route parameters. [#37](https://github.com/blackbaud/skyux-router/pull/37)
+
 # 5.0.0-beta.2 (2021-09-14)
 
 - Fixed the `skyHref` directive to handle scenarios where `SkyAppConfig` is not provided. [#36](https://github.com/blackbaud/skyux-router/pull/36)
