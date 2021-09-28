@@ -1,6 +1,6 @@
 # 5.0.0-beta.3 (2021-09-28)
 
-- Added bug fixes and features from the `master` branch.
+- Added bug fixes and features from the `master` branch. [#39](https://github.com/blackbaud/skyux-router/pull/39)
 
 # 4.3.0 (2021-09-28)
 
