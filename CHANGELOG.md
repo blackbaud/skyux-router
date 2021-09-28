@@ -1,6 +1,6 @@
 # 4.3.0 (2021-09-28)
 
-- Updated the `skyHref` directive to support array inputs as part of supporting route parameters. [#37](https://github.com/blackbaud/skyux-router/pull/37)
+- Updated the `skyHref` directive to support using array inputs for route parameters. [#37](https://github.com/blackbaud/skyux-router/pull/37)
 
 # 4.2.2 (2021-06-09)
 
