@@ -6,7 +6,7 @@
     "@angular/core": "^12.2.7",
     "@angular/router": "^12.2.7",
     "@skyux/config": "^5.0.0",
-    "@skyux/core": "^5.0.0-beta.11"
+    "@skyux/core": "^5.0.0-beta.12"
   },
   "dependencies": {
     "tslib": "^2.3.1"
