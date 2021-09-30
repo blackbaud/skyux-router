@@ -28,7 +28,7 @@
     "@skyux/i18n": "5.0.0",
     "@skyux/indicators": "5.0.0-beta.4",
     "@skyux/modals": "5.0.0-beta.6",
-    "@skyux/packages": "5.0.0-beta.140",
+    "@skyux/packages": "5.0.0-beta.142",
     "@skyux/theme": "5.0.0",
     "rxjs": "6.6.7",
     "tslib": "2.3.1",
