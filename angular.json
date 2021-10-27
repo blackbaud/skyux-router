@@ -168,9 +168,7 @@
               "projects/router-showcase/src/favicon.ico",
               "projects/router-showcase/src/assets"
             ],
-            "styles": [
-              "projects/router-showcase/src/styles.scss"
-            ],
+            "styles": ["projects/router-showcase/src/styles.scss"],
             "scripts": []
           }
         },
