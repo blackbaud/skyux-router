@@ -12,16 +12,10 @@
     "importHelpers": true,
     "target": "es2017",
     "paths": {
-      "router": [
-        "dist/router/router",
-        "dist/router"
-      ]
+      "router": ["dist/router/router", "dist/router"]
     },
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
+    "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false
