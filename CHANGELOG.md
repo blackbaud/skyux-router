@@ -1,6 +1,6 @@
 # 5.0.2 (2021-11-18)
 
-- Added support for prettier code formatting and updated the builder to support StackBlitz. []()
+- Added support for prettier code formatting and updated the builder to support StackBlitz. [#46](https://github.com/blackbaud/skyux-router/pull/46)
 
 # 5.0.1 (2021-10-05)
 
