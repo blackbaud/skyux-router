@@ -1,3 +1,7 @@
+# 5.0.2 (2021-11-18)
+
+- Added support for prettier code formatting and updated the builder to support StackBlitz. []()
+
 # 5.0.1 (2021-10-05)
 
 - Marked `skyAppLinkExternal` as deprecated in favor of `skyHref`. [#42](https://github.com/blackbaud/skyux-router/pull/42)
